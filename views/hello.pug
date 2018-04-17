@@ -1,3 +1,5 @@
 extends layout
+
 block content
 	p Hello Layout
+	h2 Sales ends in #{h.moment().endOf('day').fromNow()}
