@@ -19,3 +19,10 @@ exports.getStores = async (req, res) => {
 	const stores = await Store.find();
 	res.render('stores', { title: 'Stores', stores });
 };
+
+exports.editStore = async (req, res) => {
+	//find the store for the given id
+	const store = await Store.findOne({ _id: req.params.id });
+	//then find the loged user is the owner to edit
+	res.render('editStore', { title: `Edit ${store.name}`, store });
+};
