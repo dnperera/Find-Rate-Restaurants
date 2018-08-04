@@ -18,3 +18,29 @@ exports.getStores = async (req, res) => {
   const stores = await Store.find();
   res.render("stores", { title: "stores", stores: stores });
 };
+
+exports.editStore = async (req, res) => {
+  //1) find the store for the given id
+  const store = await Store.findOne({ _id: req.params.id });
+
+  //2) to do - check user is authorised to edit store
+  //3)render edit store form
+  res.render("editStore", { title: `Edit ${store.name}`, store });
+};
+exports.updateStore = async (req, res) => {
+  //1) find the store for the given id and update
+  const updatedStore = await Store.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    {
+      new: true, //Return the updated store instead of old
+      runValidators: true
+    }
+  ).exec();
+  req.flash(
+    "success",
+    `Successfully updated <strong>${updatedStore.name}</strong>.
+  <a href="/stores/${updatedStore.slug}">View Store </a>`
+  );
+  res.redirect(`/stores/${updatedStore._id}/edit`);
+};
