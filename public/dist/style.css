@@ -496,11 +496,14 @@ p {
   font-size: 10rem;
   text-align: center; }
 
-input, textarea {
+input,
+textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #e6e6e6; }
-  input.input--error, textarea.input--error {
+  border: 1px solid #e6e6e6;
+  margin-bottom: 1rem; }
+  input.input--error,
+  textarea.input--error {
     border-color: red; }
 
 label {

@@ -1,6 +1,7 @@
 extends layout
 include mixins/_storeForm
 block content
-	.inner
-		h2= title
-		+storeForm({name:'Red Whale Coffee'})
+ .inner
+  //- h2 #{title}
+  h2=title
+  +storeForm()
