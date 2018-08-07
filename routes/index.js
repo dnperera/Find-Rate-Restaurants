@@ -11,6 +11,11 @@ const {
   findStoreBySlug,
   getStoresByTag
 } = require("../controllers/storeController");
+const {
+  loginForm,
+  registerForm,
+  validateRegister
+} = require("../controllers/userController");
 const { catchErrors } = require("../handlers/errorHandlers");
 // Do work here
 router.get("/", catchErrors(getStores));
@@ -24,5 +29,8 @@ router.post("/add/:id", upload, catchErrors(resize), catchErrors(updateStore));
 
 router.get("/tags", catchErrors(getStoresByTag));
 router.get("/tags/:tag", catchErrors(getStoresByTag));
+
+router.get("/login", loginForm);
+router.get("/register", validateRegister);
 
 module.exports = router;
