@@ -91,7 +91,11 @@ exports.findStoreBySlug = async (req, res, next) => {
 };
 
 exports.getStoresByTag = async (req, res) => {
-  const tags = await Store.getTagsList();
   const tag = req.params.tag;
-  res.render("tag", { tags, title: "Tags", tag });
+  const tagQuery = tag || { $exists: true };
+  const tagsPromise = Store.getTagsList();
+  const storesPromise = Store.find({ tags: tagQuery });
+  //if there are multiple promises that does not depend on each other , you can execute all at once
+  const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
+  res.render("tag", { tags, stores, title: "Tags", tag });
 };
