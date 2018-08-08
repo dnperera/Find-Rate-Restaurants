@@ -14,8 +14,10 @@ const {
 const {
   loginForm,
   registerForm,
-  validateRegister
+  validateRegister,
+  register
 } = require("../controllers/userController");
+const { login } = require("../controllers/authController");
 const { catchErrors } = require("../handlers/errorHandlers");
 // Do work here
 router.get("/", catchErrors(getStores));
@@ -31,6 +33,10 @@ router.get("/tags", catchErrors(getStoresByTag));
 router.get("/tags/:tag", catchErrors(getStoresByTag));
 
 router.get("/login", loginForm);
-router.get("/register", validateRegister);
+router.get("/register", registerForm);
+//1) Validate the user registration data
+//2) Save the user data
+//3) need to log the use in
+router.post("/register", validateRegister, catchErrors(register), login);
 
 module.exports = router;
