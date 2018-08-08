@@ -21,7 +21,11 @@ const userSchema = new Schema({
     trim: true
   }
 });
-
+//create virutal feild in mongoose user model for avatar
+userSchema.virtual("gravatar").get(function() {
+  const hash = md5(this.email); // Avatar use md5 algorithm
+  return `https://gravatar.com/avatar/${hash}?s=200`;
+});
 userSchema.plugin(passportLocalMongoose, { usernameField: "email" });
 userSchema.plugin(mongodbErrorHandler);
 module.exports = mongoose.model("User", userSchema);

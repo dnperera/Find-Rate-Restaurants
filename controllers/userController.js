@@ -54,3 +54,7 @@ exports.register = async (req, res, next) => {
   await registerWithPromise(user, req.body.password);
   next();
 };
+
+exports.account = (req, res) => {
+  res.render("account", { title: "Edit Your Account" });
+};
