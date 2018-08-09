@@ -19,7 +19,9 @@ const userSchema = new Schema({
     type: String,
     required: "Please enter the name",
     trim: true
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 });
 //create virutal feild in mongoose user model for avatar
 userSchema.virtual("gravatar").get(function() {
