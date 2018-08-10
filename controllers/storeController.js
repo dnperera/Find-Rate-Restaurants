@@ -41,6 +41,8 @@ exports.addStore = (req, res) => {
 };
 
 exports.createStore = async (req, res) => {
+  //add current logged in user's id to the incoming req as author
+  req.body.author = req.user._id;
   const store = await new Store(req.body).save();
   req.flash("success", `Successfully new store ${store.name} was created`);
   res.redirect(`/stores/${store.slug}`);
@@ -52,13 +54,24 @@ exports.getStores = async (req, res) => {
   res.render("stores", { title: "stores", stores: stores });
 };
 
+const confirmOwner = (store, user) => {
+  if (store.author.equals(user._id)) {
+    return true;
+  }
+  return false;
+};
 exports.editStore = async (req, res) => {
   //1) find the store for the given id
   const store = await Store.findOne({ _id: req.params.id });
 
   //2) to do - check user is authorised to edit store
-  //3)render edit store form
-  res.render("editStore", { title: `Edit ${store.name}`, store });
+  if (!confirmOwner(store, req.user)) {
+    req.flash("error", "You are not authroised to edit the store!");
+    res.redirect("back");
+  } else {
+    //3)render edit store form
+    res.render("editStore", { title: `Edit ${store.name}`, store });
+  }
 };
 exports.updateStore = async (req, res) => {
   //set the location data to be a Point type
@@ -81,7 +94,9 @@ exports.updateStore = async (req, res) => {
 };
 
 exports.findStoreBySlug = async (req, res, next) => {
-  const store = await Store.findOne({ slug: req.params.slug });
+  const store = await Store.findOne({ slug: req.params.slug }).populate(
+    "author"
+  );
   if (!store) {
     // next();
     // return;
