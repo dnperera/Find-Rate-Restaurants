@@ -1,0 +1,9 @@
+extends layout
+block content
+  .inner
+    h3= title
+      .map
+        .autocomplete
+          input.autocomplete__input(type='text' placeholder='Find near by resturants' name='geolocate')
+        #map
+          p Loading the map ....

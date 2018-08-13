@@ -9,7 +9,10 @@ const {
   upload,
   resize,
   findStoreBySlug,
-  getStoresByTag
+  getStoresByTag,
+  search,
+  mapStores,
+  mapPage
 } = require("../controllers/storeController");
 const {
   loginForm,
@@ -62,4 +65,10 @@ router.post(
   confirmedPasswords,
   catchErrors(updatePassword)
 );
+router.get("/map", mapPage);
+/**
+ * API
+ */
+router.get("/api/search", catchErrors(search));
+router.get("/api/stores/near", catchErrors(mapStores));
 module.exports = router;

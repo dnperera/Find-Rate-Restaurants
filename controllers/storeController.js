@@ -114,3 +114,48 @@ exports.getStoresByTag = async (req, res) => {
   const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
   res.render("tag", { tags, stores, title: "Tags", tag });
 };
+
+exports.search = async (req, res) => {
+  //Find the stores with matching search word
+  const stores = await Store.find(
+    {
+      $text: {
+        $search: req.query.q
+      }
+    },
+    {
+      score: { $meta: "textScore" }
+    }
+  )
+    //then sort the list by frequency of the search term in the store titlw and description
+    .sort({
+      score: { $meta: "textScore" }
+    })
+    //Limit the 5 results
+    .limit(5);
+
+  res.json(stores);
+};
+
+exports.mapStores = async (req, res) => {
+  const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
+  const searchParams = {
+    location: {
+      $near: {
+        $geometry: {
+          type: "Point",
+          coordinates
+        },
+        $maxDistance: 10000 //10Km
+      }
+    }
+  };
+  const stores = await Store.find(searchParams)
+    .select("name photo slug location") // with select you can select fields you want, if you do not want select field -name
+    .limit(10);
+  res.json(stores);
+};
+
+exports.mapPage = (req, res) => {
+  res.render("map", { title: "Map" });
+};
