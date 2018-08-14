@@ -24,9 +24,9 @@ html
               .search__results
           .nav__section.nav__section--user
             if user
-              li.nav__item: a.nav__link(href="/hearts", class=(currentPath.startsWith('/hearts') ? 'nav__link--active' : ''))
+              li.nav__item: a.nav__link(href="/favourites", class=(currentPath.startsWith('/favourites') ? 'nav__link--active' : ''))
                 != h.icon('heart')
-                span.heart-count #{user.hearts && user.hearts.length}
+                span.heart-count #{user.favourite && user.favourite.length}
               li.nav__item: a.nav__link(href="/logout", class=(currentPath.startsWith('/logout') ? 'nav__link--active' : ''))
                 != h.icon('logout')
                 span Logout

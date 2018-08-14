@@ -12,7 +12,8 @@ const {
   getStoresByTag,
   search,
   mapStores,
-  mapPage
+  mapPage,
+  favouriteStore
 } = require("../controllers/storeController");
 const {
   loginForm,
@@ -71,4 +72,5 @@ router.get("/map", mapPage);
  */
 router.get("/api/search", catchErrors(search));
 router.get("/api/stores/near", catchErrors(mapStores));
+router.post("/api/stores/:id/favourite", catchErrors(favouriteStore));
 module.exports = router;

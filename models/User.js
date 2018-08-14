@@ -21,7 +21,8 @@ const userSchema = new Schema({
     trim: true
   },
   resetPasswordToken: String,
-  resetPasswordExpires: Date
+  resetPasswordExpires: Date,
+  favourite: [{ type: mongoose.Schema.ObjectId, ref: "Store" }]
 });
 //create virutal feild in mongoose user model for avatar
 userSchema.virtual("gravatar").get(function() {
