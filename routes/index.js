@@ -13,7 +13,8 @@ const {
   search,
   mapStores,
   mapPage,
-  favouriteStore
+  favouriteStore,
+  favourites
 } = require("../controllers/storeController");
 const {
   loginForm,
@@ -34,6 +35,7 @@ const {
   updatePassword
 } = require("../controllers/authController");
 
+const { addReviews } = require("../controllers/reviewController");
 const { catchErrors } = require("../handlers/errorHandlers");
 // Do work here
 router.get("/", catchErrors(getStores));
@@ -67,10 +69,13 @@ router.post(
   catchErrors(updatePassword)
 );
 router.get("/map", mapPage);
+router.get("/favourites", isLoggedIn, catchErrors(favourites));
+router.post("/reviews/:id", isLoggedIn, catchErrors(addReviews));
 /**
  * API
  */
 router.get("/api/search", catchErrors(search));
 router.get("/api/stores/near", catchErrors(mapStores));
 router.post("/api/stores/:id/favourite", catchErrors(favouriteStore));
+
 module.exports = router;

@@ -172,3 +172,10 @@ exports.favouriteStore = async (req, res) => {
   );
   res.json(user);
 };
+
+exports.favourites = async (req, res) => {
+  const stores = await Store.find({
+    _id: { $in: req.user.favourite }
+  });
+  res.render("stores", { title: "Favorite Resturants & Cafe", stores });
+};
