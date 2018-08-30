@@ -14,7 +14,8 @@ const {
   mapStores,
   mapPage,
   favouriteStore,
-  favourites
+  favourites,
+  getTopStores
 } = require("../controllers/storeController");
 const {
   loginForm,
@@ -40,6 +41,7 @@ const { catchErrors } = require("../handlers/errorHandlers");
 // Do work here
 router.get("/", catchErrors(getStores));
 router.get("/stores", catchErrors(getStores));
+router.get("/stores/page/:page", catchErrors(getStores));
 router.get("/stores/:id/edit", catchErrors(editStore));
 router.get("/stores/:slug", catchErrors(findStoreBySlug));
 
@@ -71,6 +73,7 @@ router.post(
 router.get("/map", mapPage);
 router.get("/favourites", isLoggedIn, catchErrors(favourites));
 router.post("/reviews/:id", isLoggedIn, catchErrors(addReviews));
+router.get("/top", catchErrors(getTopStores));
 /**
  * API
  */

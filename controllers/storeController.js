@@ -50,9 +50,28 @@ exports.createStore = async (req, res) => {
 };
 
 exports.getStores = async (req, res) => {
+  //if the user in home page assume page is 1
+  const currentpage = req.params.page || 1;
+  const limit = 4; // display stores limit per page
+  const skip = currentpage * limit - limit;
   //Find all stores from the db
-  const stores = await Store.find();
-  res.render("stores", { title: "stores", stores: stores });
+  const storesPromise = Store.find()
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: "desc" });
+  const countPromise = Store.count();
+
+  const [stores, count] = await Promise.all([storesPromise, countPromise]);
+  const pages = Math.ceil(count / limit);
+  if (!stores.length && skip) {
+    req.flash(
+      "info",
+      `You requested page ${currentpage}. But that does not exist .So you will be directed to page ${pages}`
+    );
+    res.redirect(`/stores/page/${pages}`);
+    return;
+  }
+  res.render("stores", { title: "stores", stores, currentpage, pages, count });
 };
 
 const confirmOwner = (store, user) => {
@@ -178,4 +197,9 @@ exports.favourites = async (req, res) => {
     _id: { $in: req.user.favourite }
   });
   res.render("stores", { title: "Favorite Resturants & Cafe", stores });
+};
+
+exports.getTopStores = async (req, res) => {
+  const stores = await Store.getTopRatedStores();
+  res.render("topStores", { stores, title: "To Stores" });
 };

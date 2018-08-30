@@ -1,8 +1,10 @@
 extends layout
 include mixins/_storeCard
+include mixins/_paginations
 block content
   .inner
     h3 #{title}
     .stores
       each store in stores
-        +storeCard(store)     
+        +storeCard(store)
+    +pagination(currentpage, pages, count)     
